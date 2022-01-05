@@ -1,0 +1,12 @@
+body {
+    background-color: white;
+}
+
+
+#unity-canvas {
+    cursor:move;
+    position: absolute;
+    z-index: 9;
+    left: 0;
+    top: 0;
+}

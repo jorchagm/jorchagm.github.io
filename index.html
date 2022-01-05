@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" href="styles.css">
+    <title>Unity WebGL Player | VibeTownWebGL</title>
+  </head>
+  <body style="text-align: center">
+    <canvas id="unity-canvas" class="ui-widget-content" style="width: 160vh; height: 120vh; background: #231F20"></canvas>
+    <script src="Build/VibeTown.loader.js"></script>
+    <script src="DragDropTouch.js"></script>
+    <script>
+      const aspectRatioCanvas = 4 / 3;
+      const root = document.documentElement;
+      const canvas = document.querySelector("#unity-canvas");
+
+      createUnityInstance(canvas, {
+        dataUrl: "Build/VibeTown.data",
+        frameworkUrl: "Build/VibeTown.framework.js",
+        codeUrl: "Build/VibeTown.wasm",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "MakiStudios",
+        productName: "VibeTownWebGL",
+        productVersion: "1.0.0",
+      });
+
+      function onResizeWindow() {
+        const viewportWidth = window.innerWidth;
+        const viewportHeight = window.innerHeight;
+
+        if(viewportWidth / viewportHeight <= aspectRatioCanvas) {
+          console.log("if first part");
+          canvas.style.width = "width: 160vh";
+          canvas.style.height = "height: 120vh";
+        } else {
+          console.log("if second part");
+          canvas.style.width = "width: 120vw";
+          canvas.style.height = "height: 90vw";
+        }
+      }
+
+      //window.onresize = onResizeWindow;
+
+      dragElement(canvas);
+
+      function dragElement(map) {
+        var distanceX = 0, distanceY = 0, startPositionX = 0, startPositionY = 0;
+
+        //map.onpointerdown = dragMouseDown;
+        map.addEventListener("touchstart", dragMouseDown, false);
+        map.addEventListener("touchend", closeDragElement, false);
+        map.addEventListener("touchcancel", closeDragElement, false);
+        map.addEventListener("touchleave", closeDragElement, false);
+        map.addEventListener("touchmove", elementDrag, false);
+
+        function dragMouseDown(pointerEvent) {
+          pointerEvent = pointerEvent || window.event;
+          pointerEvent.preventDefault();
+          // get the pointer cursor position at startup:
+          startPositionX = pointerEvent.clientX;
+          startPositionY = pointerEvent.clientY;
+          //document.onpointerup = closeDragElement;
+          // call a function whenever the cursor moves:
+          //document.onpointermove = elementDrag;
+        }
+
+        function elementDrag(pointerEvent) {
+          pointerEvent = pointerEvent || window.event;
+          pointerEvent.preventDefault();
+          // calculate the new cursor position:
+          distanceX = startPositionX - pointerEvent.clientX;
+          distanceY = startPositionY - pointerEvent.clientY;
+          startPositionX = pointerEvent.clientX;
+          startPositionY = pointerEvent.clientY;
+          // set the element's new position:
+          console.log("map.offsetTop", map.offsetTop);
+          console.log("map.offsetBottom", map.offsetBottom);
+
+          console.log(distanceY);
+
+          if(map.offsetTop < distanceY)
+            map.style.top = (map.offsetTop - distanceY) + "px";
+
+          if(map.offsetLeft < distanceX)
+            map.style.left = (map.offsetLeft - distanceX) + "px";
+        }
+
+        function closeDragElement() {
+          // stop moving when pointer button is released:
+          document.onpointerup = null;
+          document.onpointermove = null;
+        }
+      }
+    </script>
+  </body>
+</html>
