@@ -4,8 +4,8 @@ const TEMP = 'flutter-temp-cache';
 const CACHE_NAME = 'flutter-app-cache';
 const RESOURCES = {
   "version.json": "48b5baadf72765bcf5f34ed94da81b4e",
-"index.html": "138ce3118e655b79dd50ddfeee0d3773",
-"/": "138ce3118e655b79dd50ddfeee0d3773",
+"index.html": "38e8d8d6016d0cf2170320ffd1f226b0",
+"/": "38e8d8d6016d0cf2170320ffd1f226b0",
 "main.dart.js": "d3272526d84f0a0883b64c52508d08be",
 "favicon.png": "5dcef449791fa27946b3d35ad8803796",
 "icons/Icon-192.png": "ac9a721a12bbc803b44f645561ecb1e1",
@@ -61,11 +61,7 @@ const RESOURCES = {
 "assets/assets/images/fokiballena.png": "297fe79287e5439b0f0ef72228af0707",
 "assets/assets/images/Bhover.png": "3d81f6ac4e370462481f6532f57795b8",
 "assets/assets/vibingtown.fa": "3778f035b18153642ce5e89355195361",
-"assets/assets/pagebuttons.fa": "28146eaedc8c212cfeefe3e3cda3e879",
-"canvaskit/canvaskit.js": "f00de1f742223b7cf4cec1c2a0cd9764",
-"canvaskit/profiling/canvaskit.js": "411ee45f5abb57975ee5243310c6953e",
-"canvaskit/profiling/canvaskit.wasm": "c6681b1a749ad902eefcba11fed1cb3f",
-"canvaskit/canvaskit.wasm": "efe4a5da0205bb8d8c5aca7dad981abd"
+"assets/assets/pagebuttons.fa": "28146eaedc8c212cfeefe3e3cda3e879"
 };
 
 // The application shell files that are downloaded before a service worker can
