@@ -1,97 +1,104 @@
 <!DOCTYPE html>
-<html lang="en-us">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <link rel="stylesheet" href="styles.css">
-    <title>Unity WebGL Player | VibeTownWebGL</title>
-  </head>
-  <body style="text-align: center">
-    <canvas id="unity-canvas" class="ui-widget-content" style="width: 160vh; height: 120vh; background: #231F20"></canvas>
-    <script src="Build/VibeTown.loader.js"></script>
-    <script src="DragDropTouch.js"></script>
-    <script>
-      const aspectRatioCanvas = 4 / 3;
-      const root = document.documentElement;
-      const canvas = document.querySelector("#unity-canvas");
+<html>
+<head>
+  <!--
+    If you are serving your web app in a path other than the root, change the
+    href value below to reflect the base path you are serving from.
 
-      createUnityInstance(canvas, {
-        dataUrl: "Build/VibeTown.data",
-        frameworkUrl: "Build/VibeTown.framework.js",
-        codeUrl: "Build/VibeTown.wasm",
-        streamingAssetsUrl: "StreamingAssets",
-        companyName: "MakiStudios",
-        productName: "VibeTownWebGL",
-        productVersion: "1.0.0",
+    The path provided below has to start and end with a slash "/" in order for
+    it to work correctly.
+
+    For more details:
+    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
+
+    This is a placeholder for base href that will be replaced by the value of
+    the `--base-href` argument provided to `flutter build`.
+  -->
+  <base href="/">
+
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="A new Flutter project.">
+
+  <!-- iOS meta tags & icons -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="vibingtownflutter">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png"/>
+
+  <title>vibingtownflutter</title>
+  <link rel="manifest" href="manifest.json">
+</head>
+<body>
+  <!-- This script installs service_worker.js to provide PWA functionality to
+       application. For more information, see:
+       https://developers.google.com/web/fundamentals/primers/service-workers -->
+  <script>
+    var serviceWorkerVersion = '3286779533';
+    var scriptLoaded = false;
+    function loadMainDartJs() {
+      if (scriptLoaded) {
+        return;
+      }
+      scriptLoaded = true;
+      var scriptTag = document.createElement('script');
+      scriptTag.src = 'main.dart.js';
+      scriptTag.type = 'application/javascript';
+      document.body.append(scriptTag);
+    }
+
+    if ('serviceWorker' in navigator) {
+      // Service workers are supported. Use them.
+      window.addEventListener('load', function () {
+        // Wait for registration to finish before dropping the <script> tag.
+        // Otherwise, the browser will load the script multiple times,
+        // potentially different versions.
+        var serviceWorkerUrl = 'flutter_service_worker.js?v=' + serviceWorkerVersion;
+        navigator.serviceWorker.register(serviceWorkerUrl)
+          .then((reg) => {
+            function waitForActivation(serviceWorker) {
+              serviceWorker.addEventListener('statechange', () => {
+                if (serviceWorker.state == 'activated') {
+                  console.log('Installed new service worker.');
+                  loadMainDartJs();
+                }
+              });
+            }
+            if (!reg.active && (reg.installing || reg.waiting)) {
+              // No active web worker and we have installed or are installing
+              // one for the first time. Simply wait for it to activate.
+              waitForActivation(reg.installing || reg.waiting);
+            } else if (!reg.active.scriptURL.endsWith(serviceWorkerVersion)) {
+              // When the app updates the serviceWorkerVersion changes, so we
+              // need to ask the service worker to update.
+              console.log('New service worker available.');
+              reg.update();
+              waitForActivation(reg.installing);
+            } else {
+              // Existing service worker is still good.
+              console.log('Loading app from service worker.');
+              loadMainDartJs();
+            }
+          });
+
+        // If service worker doesn't succeed in a reasonable amount of time,
+        // fallback to plaint <script> tag.
+        setTimeout(() => {
+          if (!scriptLoaded) {
+            console.warn(
+              'Failed to load app from service worker. Falling back to plain <script> tag.',
+            );
+            loadMainDartJs();
+          }
+        }, 4000);
       });
-
-      function onResizeWindow() {
-        const viewportWidth = window.innerWidth;
-        const viewportHeight = window.innerHeight;
-
-        if(viewportWidth / viewportHeight <= aspectRatioCanvas) {
-          console.log("if first part");
-          canvas.style.width = "width: 160vh";
-          canvas.style.height = "height: 120vh";
-        } else {
-          console.log("if second part");
-          canvas.style.width = "width: 120vw";
-          canvas.style.height = "height: 90vw";
-        }
-      }
-
-      //window.onresize = onResizeWindow;
-
-      dragElement(canvas);
-
-      function dragElement(map) {
-        var distanceX = 0, distanceY = 0, startPositionX = 0, startPositionY = 0;
-
-        //map.onpointerdown = dragMouseDown;
-        map.addEventListener("touchstart", dragMouseDown, false);
-        map.addEventListener("touchend", closeDragElement, false);
-        map.addEventListener("touchcancel", closeDragElement, false);
-        map.addEventListener("touchleave", closeDragElement, false);
-        map.addEventListener("touchmove", elementDrag, false);
-
-        function dragMouseDown(pointerEvent) {
-          pointerEvent = pointerEvent || window.event;
-          pointerEvent.preventDefault();
-          // get the pointer cursor position at startup:
-          startPositionX = pointerEvent.clientX;
-          startPositionY = pointerEvent.clientY;
-          //document.onpointerup = closeDragElement;
-          // call a function whenever the cursor moves:
-          //document.onpointermove = elementDrag;
-        }
-
-        function elementDrag(pointerEvent) {
-          pointerEvent = pointerEvent || window.event;
-          pointerEvent.preventDefault();
-          // calculate the new cursor position:
-          distanceX = startPositionX - pointerEvent.clientX;
-          distanceY = startPositionY - pointerEvent.clientY;
-          startPositionX = pointerEvent.clientX;
-          startPositionY = pointerEvent.clientY;
-          // set the element's new position:
-          console.log("map.offsetTop", map.offsetTop);
-          console.log("map.offsetBottom", map.offsetBottom);
-
-          console.log(distanceY);
-
-          if(map.offsetTop < distanceY)
-            map.style.top = (map.offsetTop - distanceY) + "px";
-
-          if(map.offsetLeft < distanceX)
-            map.style.left = (map.offsetLeft - distanceX) + "px";
-        }
-
-        function closeDragElement() {
-          // stop moving when pointer button is released:
-          document.onpointerup = null;
-          document.onpointermove = null;
-        }
-      }
-    </script>
-  </body>
+    } else {
+      // Service workers not supported. Just drop the <script> tag.
+      loadMainDartJs();
+    }
+  </script>
+</body>
 </html>
