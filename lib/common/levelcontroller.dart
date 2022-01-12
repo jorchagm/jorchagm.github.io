@@ -289,7 +289,7 @@ class LevelController extends FlameGame
     }
 
     Sprite speechBubbleSprite = await loadSprite('DialogBubble_half.png');
-    FireAtlas mapAtlas = await loadFireAtlas("vibingTown.fa");
+    FireAtlas mapAtlas = await loadFireAtlas("vibingtown.fa");
     for (int i = 0; i < buildings.length; i++) {
       final Sprite pressedSprite =
           mapAtlas.getSprite(buildings[i][0].toString() + "Selected");
